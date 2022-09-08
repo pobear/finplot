@@ -776,6 +776,9 @@ class FinRect(pg.RectROI):
     def __init__(self, ax, brush, *args, **kwargs):
         self.ax = ax
         self.brush = brush
+        if kwargs.get("pen"):
+            self.currentPen = kwargs.get("pen")
+
         super().__init__(*args, **kwargs)
 
     def paint(self, p, *args):
@@ -1877,7 +1880,9 @@ def plot(
     if ax.vb.yscale.scaletype == "log":
         y = y + log_plot_offset
     if style is None or any(ch in style for ch in "-_."):
-        connect_dots = "finite"  # same as matplotlib; use datasrc.standalone=True if you want to keep separate intervals on a plot
+        connect_dots = kwargs.get(
+            "connect", "finite"
+        )  # same as matplotlib; use datasrc.standalone=True if you want to keep separate intervals on a plot
         item = ax.plot(
             x,
             y,
@@ -1900,7 +1905,7 @@ def plot(
             pen=None,
             symbol=symbol,
             symbolPen=None,
-            symbolSize=7 * width,
+            symbolSize=width,
             symbolBrush=pg.mkBrush(used_color),
             name=legend,
         )
@@ -2002,7 +2007,7 @@ def add_band(y0, y1, color=band_color, ax=None):
     return lr
 
 
-def add_rect(p0, p1, color=band_color, interactive=False, ax=None):
+def add_rect(p0, p1, color=band_color, pen_color=None, interactive=False, ax=None):
     ax = _create_plot(ax=ax, maximize=False)
     x_pts = _pdtime2index(ax, pd.Series([p0[0], p1[0]]))
     ix = ax.vb.yscale.invxform
@@ -2012,6 +2017,7 @@ def add_rect(p0, p1, color=band_color, interactive=False, ax=None):
     rect = FinRect(
         ax=ax,
         brush=pg.mkBrush(color),
+        pen=pg.mkPen(pen_color),
         pos=pos,
         size=size,
         movable=interactive,
