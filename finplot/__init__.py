@@ -1541,7 +1541,7 @@ class ScatterLabelItem(FinPlotItem):
 def create_plot(
     title="Finance Plot", rows=1, init_zoom_periods=1e10, maximize=True, yscale="linear"
 ):
-    pg.setConfigOptions(foreground=foreground, background=background)
+    pg.setConfigOptions(foreground=foreground, background=background, antialias=True)
     win = FinWindow(title)
     # normally first graph is of higher significance, so enlarge
     win.ci.layout.setRowStretchFactor(0, top_graph_scale)
@@ -1557,7 +1557,7 @@ def create_plot(
 
 
 def create_plot_widget(master, rows=1, init_zoom_periods=1e10, yscale="linear"):
-    pg.setConfigOptions(foreground=foreground, background=background)
+    pg.setConfigOptions(foreground=foreground, background=background, antialias=True)
     global last_ax
     if master not in windows:
         windows.append(master)
