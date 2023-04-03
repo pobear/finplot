@@ -17,7 +17,7 @@ setuptools.setup(
     install_requires=[
         "numpy>=1.22.3",
         "pandas",
-        "PyQt6",
+        "PyQt5",
         "pyqtgraph>=0.11.1",
         "python-dateutil",
     ],
